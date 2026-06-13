@@ -1,11 +1,11 @@
 .app {
-  max-width: 960px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
 
 .app__header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .app__title {
@@ -29,55 +29,18 @@
 
 .app__layout {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
 }
 
-.app__sidebar-title {
-  margin: 0 0 0.75rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #bdc1c6;
+.app__chat-card {
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .app__layout {
     grid-template-columns: 1fr;
   }
-}
-
-.app__status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-  color: #9aa0a6;
-}
-
-.app__status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #34a853;
-}
-
-.app__steps {
-  margin: 0;
-  padding-left: 1.25rem;
-  color: #bdc1c6;
-}
-
-.app__steps li {
-  margin-bottom: 0.5rem;
-}
-
-.app__steps li.done {
-  color: #81c995;
-}
-
-.app__steps li.current {
-  color: #8ab4f8;
-  font-weight: 500;
 }

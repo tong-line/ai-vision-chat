@@ -1,10 +1,25 @@
-import { useMediaStream } from '../hooks/useMediaStream'
+import type { MediaStatus } from '../hooks/useMediaStream'
 import './CameraPreview.css'
 
-export function CameraPreview() {
-  const { videoRef, status, error, hasVideo, hasAudio, start, stop } =
-    useMediaStream()
+interface CameraPreviewProps {
+  videoRef: React.RefObject<HTMLVideoElement | null>
+  status: MediaStatus
+  error: string | null
+  hasVideo: boolean
+  hasAudio: boolean
+  onStart: () => void
+  onStop: () => void
+}
 
+export function CameraPreview({
+  videoRef,
+  status,
+  error,
+  hasVideo,
+  hasAudio,
+  onStart,
+  onStop,
+}: CameraPreviewProps) {
   return (
     <section className="camera">
       <div className="camera__header">
@@ -38,13 +53,13 @@ export function CameraPreview() {
 
       <div className="camera__actions">
         {status === 'active' ? (
-          <button className="camera__btn camera__btn--stop" onClick={stop}>
+          <button className="camera__btn camera__btn--stop" onClick={onStop}>
             关闭
           </button>
         ) : (
           <button
             className="camera__btn camera__btn--start"
-            onClick={start}
+            onClick={onStart}
             disabled={status === 'requesting'}
           >
             {status === 'requesting' ? '开启中...' : '开启摄像头'}
