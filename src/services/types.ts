@@ -1,0 +1,56 @@
+export type MessageRole = 'user' | 'assistant'
+
+export interface Message {
+  id: string
+  role: MessageRole
+  content: string
+  imageIncluded?: boolean
+  timestamp: number
+}
+
+export interface ChatRequest {
+  text: string
+  image?: Blob | null
+  history?: Message[]
+}
+
+export interface ChatUsage {
+  promptTokens?: number
+  completionTokens?: number
+  imageSent: boolean
+}
+
+export interface ChatResponse {
+  reply: string
+  usage?: ChatUsage
+}
+
+export interface ChatService {
+  sendMessage(request: ChatRequest): Promise<ChatResponse>
+}
+
+export type ChatMode = 'mock' | 'direct' | 'proxy'
+
+export interface AppConfig {
+  chatMode: ChatMode
+  apiBaseUrl: string
+  llmApiKey: string
+  llmBaseUrl: string
+  llmModel: string
+  frameIntervalMs: number
+  maxHistoryRounds: number
+}
+
+export function getAppConfig(): AppConfig {
+  return {
+    chatMode: (import.meta.env.VITE_CHAT_MODE as ChatMode) || 'mock',
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001',
+    llmApiKey: import.meta.env.VITE_LLM_API_KEY || '',
+    llmBaseUrl:
+      import.meta.env.VITE_LLM_BASE_URL ||
+      'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    llmModel: import.meta.env.VITE_LLM_MODEL || 'qwen-vl-max',
+    frameIntervalMs: 3000,
+    maxHistoryRounds: 10,
+  }
+}
