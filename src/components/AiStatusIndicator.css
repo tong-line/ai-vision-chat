@@ -1,0 +1,143 @@
+.ai-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 10px;
+  background: rgba(15, 17, 23, 0.6);
+  border: 1px solid #2d3142;
+}
+
+.ai-status__orb-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-status__orb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--orb-color);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--orb-color) 50%, transparent);
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+.ai-status--listening .ai-status__orb {
+  animation: pulse-listen 1s ease-in-out infinite;
+}
+
+.ai-status--thinking .ai-status__orb {
+  animation: pulse-think 0.8s ease-in-out infinite;
+}
+
+.ai-status--speaking .ai-status__orb {
+  animation: pulse-speak 1.2s ease-in-out infinite;
+}
+
+.ai-status__waves {
+  position: absolute;
+  bottom: 4px;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 20px;
+}
+
+.ai-status__wave {
+  width: 3px;
+  height: 8px;
+  background: #34a853;
+  border-radius: 2px;
+  animation: wave 0.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+.ai-status__rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-status__ring {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #8ab4f8;
+  animation: ring-expand 1.5s ease-out infinite;
+}
+
+.ai-status__ring--delay {
+  animation-delay: 0.75s;
+}
+
+.ai-status__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-status__label {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e8eaed;
+}
+
+.ai-status__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #9aa0a6;
+}
+
+.ai-status__subtitle {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  color: #81c995;
+  font-style: italic;
+  word-break: break-word;
+  animation: fade-in 0.2s ease;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes pulse-listen {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes pulse-think {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(0.9); opacity: 1; }
+}
+
+@keyframes pulse-speak {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  75% { transform: scale(0.95); }
+}
+
+@keyframes wave {
+  0%, 100% { height: 8px; }
+  50% { height: 18px; }
+}
+
+@keyframes ring-expand {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
