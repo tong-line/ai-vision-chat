@@ -35,8 +35,8 @@ npm run dev
 | `VITE_CHAT_MODE` | `mock` / `direct` / `proxy` | `mock` |
 | `VITE_API_BASE_URL` | 后端代理地址 | `http://localhost:3001` |
 | `VITE_LLM_API_KEY` | 大模型 API Key | 空 |
-| `VITE_LLM_BASE_URL` | 大模型 API 地址 | 通义兼容接口 |
-| `VITE_LLM_MODEL` | 模型名称 | `qwen-vl-max` |
+| `VITE_LLM_BASE_URL` | 大模型 API 地址 | 智谱 `https://open.bigmodel.cn/api/paas/v4` |
+| `VITE_LLM_MODEL` | 模型名称 | `glm-4.6v` |
 
 ## 架构说明
 

@@ -1,7 +1,7 @@
-import type { ChatRequest, ChatResponse } from '../types'
+import type { ChatRequest, ChatResponse, Message } from '../types'
 import { getAppConfig } from '../types'
 
-/** 浏览器直连大模型 API（OpenAI 兼容格式） */
+/** 浏览器直连智谱大模型 API（OpenAI 兼容格式） */
 export async function sendDirectMessage(
   request: ChatRequest,
 ): Promise<ChatResponse> {
@@ -11,7 +11,7 @@ export async function sendDirectMessage(
     throw new Error('未配置 VITE_LLM_API_KEY，请在 .env 中填写或改用 mock 模式')
   }
 
-  const messages = buildMessages(request)
+  const messages = await buildMessages(request)
   const hasImage = Boolean(request.image)
 
   const response = await fetch(`${config.llmBaseUrl}/chat/completions`, {
@@ -23,12 +23,14 @@ export async function sendDirectMessage(
     body: JSON.stringify({
       model: config.llmModel,
       messages,
+      temperature: 0.7,
+      max_tokens: 1024,
     }),
   })
 
   if (!response.ok) {
     const errorText = await response.text()
-    throw new Error(`大模型 API 请求失败: ${response.status} ${errorText}`)
+    throw new Error(`智谱 API 请求失败: ${response.status} ${errorText}`)
   }
 
   const data = await response.json()
@@ -45,19 +47,41 @@ export async function sendDirectMessage(
 }
 
 async function buildMessages(request: ChatRequest) {
-  const content: Array<
-    { type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }
-  > = [{ type: 'text', text: request.text }]
+  const history = trimHistory(request.history ?? [], getAppConfig().maxHistoryRounds)
+  const pastMessages = history.map((msg) => ({
+    role: msg.role,
+    content: msg.content,
+  }))
 
+  const currentContent = await buildCurrentContent(request)
+
+  return [...pastMessages, { role: 'user' as const, content: currentContent }]
+}
+
+async function buildCurrentContent(request: ChatRequest) {
+  const parts: Array<
+    { type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }
+  > = []
+
+  // 智谱文档惯例：图片放文字前面
   if (request.image) {
     const base64 = await blobToBase64(request.image)
-    content.push({
+    parts.push({
       type: 'image_url',
       image_url: { url: `data:image/jpeg;base64,${base64}` },
     })
   }
 
-  return [{ role: 'user', content }]
+  parts.push({ type: 'text', text: request.text })
+
+  return parts.length === 1 && parts[0].type === 'text'
+    ? request.text
+    : parts
+}
+
+function trimHistory(history: Message[], maxRounds: number) {
+  const maxMessages = maxRounds * 2
+  return history.slice(-maxMessages)
 }
 
 function blobToBase64(blob: Blob): Promise<string> {

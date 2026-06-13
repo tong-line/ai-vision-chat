@@ -48,8 +48,8 @@ export function getAppConfig(): AppConfig {
     llmApiKey: import.meta.env.VITE_LLM_API_KEY || '',
     llmBaseUrl:
       import.meta.env.VITE_LLM_BASE_URL ||
-      'https://dashscope.aliyuncs.com/compatible-mode/v1',
-    llmModel: import.meta.env.VITE_LLM_MODEL || 'qwen-vl-max',
+      'https://open.bigmodel.cn/api/paas/v4',
+    llmModel: import.meta.env.VITE_LLM_MODEL || 'glm-4.6v',
     frameIntervalMs: 3000,
     maxHistoryRounds: 10,
   }
