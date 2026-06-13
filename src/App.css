@@ -27,6 +27,26 @@
   padding: 1.5rem;
 }
 
+.app__layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.app__sidebar-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #bdc1c6;
+}
+
+@media (max-width: 768px) {
+  .app__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 .app__status {
   display: flex;
   align-items: center;

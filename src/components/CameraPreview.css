@@ -1,0 +1,113 @@
+.camera {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.camera__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.camera__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.camera__badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.camera__badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid #2d3142;
+  color: #9aa0a6;
+}
+
+.camera__badge.on {
+  color: #81c995;
+  border-color: #34a853;
+  background: rgba(52, 168, 83, 0.1);
+}
+
+.camera__badge.off {
+  color: #9aa0a6;
+}
+
+.camera__viewport {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #0f1117;
+  border: 1px solid #2d3142;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.camera__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9aa0a6;
+  font-size: 0.9rem;
+  background: rgba(15, 17, 23, 0.85);
+}
+
+.camera__error {
+  margin: 0;
+  color: #f28b82;
+  font-size: 0.875rem;
+}
+
+.camera__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.camera__btn {
+  padding: 0.55rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.camera__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.camera__btn--start {
+  background: #8ab4f8;
+  color: #0f1117;
+}
+
+.camera__btn--stop {
+  background: transparent;
+  color: #f28b82;
+  border: 1px solid #f28b82;
+}
+
+.camera__btn--start:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.camera__btn--stop:hover {
+  background: rgba(242, 139, 130, 0.1);
+}
