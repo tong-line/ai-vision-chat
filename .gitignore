@@ -1,0 +1,32 @@
+# dependencies
+node_modules
+
+# build
+dist
+dist-ssr
+
+# env（含 API Key，切勿提交）
+.env
+.env.local
+.env.*.local
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# logs
+*.log
+npm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# typescript
+*.tsbuildinfo
