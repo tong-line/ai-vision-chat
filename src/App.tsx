@@ -7,7 +7,7 @@ import { useMediaStream } from './hooks/useMediaStream'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { useSpeechSynthesis } from './hooks/useSpeechSynthesis'
 import { chatService } from './services/chat'
-import { FrameIntervalGate } from './services/costControl'
+import { FrameIntervalGate, SceneChangeDetector } from './services/costControl'
 import type { Message } from './services/types'
 import { getAppConfig } from './services/types'
 import './App.css'
@@ -45,6 +45,7 @@ function App() {
   const messagesRef = useRef(messages)
   messagesRef.current = messages
   const frameGateRef = useRef(new FrameIntervalGate())
+  const sceneDetectorRef = useRef(new SceneChangeDetector())
 
   const handleSendText = useCallback(
     async (text: string) => {
@@ -61,16 +62,22 @@ function App() {
         includeVision && media.status === 'active' && media.hasVideo
 
       if (shouldCapture) {
-        const decision = frameGateRef.current.check(config.frameIntervalMs)
-        if (decision.shouldSend) {
-          image = await captureFrame(media.videoRef.current)
-          imageIncluded = Boolean(image)
-          if (imageIncluded) {
-            frameGateRef.current.markSent()
-            setCostHint(null)
-          }
+        const intervalDecision = frameGateRef.current.check(config.frameIntervalMs)
+        if (!intervalDecision.shouldSend) {
+          setCostHint(intervalDecision.hint)
         } else {
-          setCostHint(decision.hint)
+          const captured = await captureFrame(media.videoRef.current)
+          if (captured) {
+            const sceneDecision = await sceneDetectorRef.current.check(captured)
+            if (sceneDecision.shouldSend) {
+              image = captured
+              imageIncluded = true
+              frameGateRef.current.markSent()
+              setCostHint(null)
+            } else {
+              setCostHint(sceneDecision.hint)
+            }
+          }
         }
       } else {
         setCostHint(null)
