@@ -91,6 +91,12 @@
   font-size: 0.8rem;
 }
 
+.chat__cost-hint {
+  margin: 0;
+  color: #f9ab00;
+  font-size: 0.78rem;
+}
+
 .chat__composer {
   display: flex;
   gap: 0.5rem;

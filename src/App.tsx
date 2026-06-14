@@ -7,6 +7,7 @@ import { useMediaStream } from './hooks/useMediaStream'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { useSpeechSynthesis } from './hooks/useSpeechSynthesis'
 import { chatService } from './services/chat'
+import { FrameIntervalGate } from './services/costControl'
 import type { Message } from './services/types'
 import { getAppConfig } from './services/types'
 import './App.css'
@@ -39,9 +40,11 @@ function App() {
   const [chatError, setChatError] = useState<string | null>(null)
   const [includeVision, setIncludeVision] = useState(true)
   const [pendingAutoSend, setPendingAutoSend] = useState<string | null>(null)
+  const [costHint, setCostHint] = useState<string | null>(null)
 
   const messagesRef = useRef(messages)
   messagesRef.current = messages
+  const frameGateRef = useRef(new FrameIntervalGate())
 
   const handleSendText = useCallback(
     async (text: string) => {
@@ -53,14 +56,27 @@ function App() {
       setPendingAutoSend(null)
 
       let image: Blob | null = null
+      let imageIncluded = false
       const shouldCapture =
         includeVision && media.status === 'active' && media.hasVideo
 
       if (shouldCapture) {
-        image = await captureFrame(media.videoRef.current)
+        const decision = frameGateRef.current.check(config.frameIntervalMs)
+        if (decision.shouldSend) {
+          image = await captureFrame(media.videoRef.current)
+          imageIncluded = Boolean(image)
+          if (imageIncluded) {
+            frameGateRef.current.markSent()
+            setCostHint(null)
+          }
+        } else {
+          setCostHint(decision.hint)
+        }
+      } else {
+        setCostHint(null)
       }
 
-      const userMessage = createMessage('user', trimmed, Boolean(image))
+      const userMessage = createMessage('user', trimmed, imageIncluded)
       const history = messagesRef.current
       setMessages((prev) => [...prev, userMessage])
       setInput('')
@@ -97,6 +113,7 @@ function App() {
       media.videoRef,
       captureFrame,
       tts,
+      config.frameIntervalMs,
     ],
   )
 
@@ -186,6 +203,7 @@ function App() {
             isLoading={isLoading}
             isListening={speech.isListening}
             error={chatError ?? speech.error}
+            costHint={costHint}
             includeVision={includeVision}
             onInputChange={setInput}
             onSend={handleSend}
