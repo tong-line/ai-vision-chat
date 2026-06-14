@@ -11,6 +11,7 @@ interface ChatPanelProps {
   isLoading: boolean
   isListening: boolean
   error: string | null
+  costHint?: string | null
   includeVision: boolean
   onInputChange: (value: string) => void
   onSend: () => void
@@ -26,6 +27,7 @@ export function ChatPanel({
   isLoading,
   isListening,
   error,
+  costHint,
   includeVision,
   onInputChange,
   onSend,
@@ -89,6 +91,7 @@ export function ChatPanel({
       </div>
 
       {error && <p className="chat__error">{error}</p>}
+      {costHint && !error && <p className="chat__cost-hint">{costHint}</p>}
 
       <div className="chat__composer">
         <button
