@@ -30,6 +30,7 @@ export interface ChatService {
 }
 
 export type ChatMode = 'mock' | 'direct' | 'proxy'
+export type TtsProvider = 'browser' | 'edge'
 
 export interface AppConfig {
   chatMode: ChatMode
@@ -39,6 +40,8 @@ export interface AppConfig {
   llmModel: string
   frameIntervalMs: number
   maxHistoryRounds: number
+  ttsProvider: TtsProvider
+  ttsVoice: string
 }
 
 export function getAppConfig(): AppConfig {
@@ -52,5 +55,7 @@ export function getAppConfig(): AppConfig {
     llmModel: import.meta.env.VITE_LLM_MODEL || 'glm-4.6v',
     frameIntervalMs: 3000,
     maxHistoryRounds: 10,
+    ttsProvider: (import.meta.env.VITE_TTS_PROVIDER as TtsProvider) || 'edge',
+    ttsVoice: import.meta.env.VITE_TTS_VOICE || 'zh-CN-XiaoxiaoNeural',
   }
 }

@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_LLM_API_KEY: string
   readonly VITE_LLM_BASE_URL: string
   readonly VITE_LLM_MODEL: string
+  readonly VITE_TTS_PROVIDER: 'browser' | 'edge'
+  readonly VITE_TTS_VOICE: string
 }
 
 interface ImportMeta {
